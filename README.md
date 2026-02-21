@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.13.7+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)
 ![Version](https://img.shields.io/badge/Version-1.4-FF6B6B?style=for-the-badge)
-![Статус](https://img.shields.io/badge/статус-Тех.обслуживание-orange?style=for-the-badge)
+![Статус](https://img.shields.io/badge/статус-Работает-success?style=for-the-badge)
 ![Лицензия](https://img.shields.io/badge/Лицензия-MIT-green?style=for-the-badge)
 [![Установить](https://img.shields.io/badge/📦-Установить_бота-blue?style=for-the-badge)](INSTALL.md)
 
