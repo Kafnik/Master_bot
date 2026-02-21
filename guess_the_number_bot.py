@@ -4,20 +4,8 @@ from time import sleep
 from telebot import types
 import configparser
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CFG_PATH = os.path.join(BASE_DIR, "config.cfg")
 
-config = configparser.ConfigParser()
-config.read(CFG_PATH, encoding="utf-8")
-
-if not config.has_section("BOT"):
-    input("❌ config.cfg НЕ НАЙДЕН ИЛИ ПУСТОЙ. Нажми Enter...")
-    exit()
-
-raw_token = config["BOT"]["TOKEN"]
-
-
-bot = telebot.TeleBot(config["BOT"]["TOKEN"])
+bot = telebot.TeleBot('8318795699:AAF_QfgOdRzpj6LB4ZqQ1bawJG6CuefDMX4')
 
 #---------Главные переменные--------
 VERSION = '1.4'
