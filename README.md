@@ -5,7 +5,7 @@
 ![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)
 ![Version](https://img.shields.io/badge/Version-1.5-FF6B6B?style=for-the-badge)
 ![Статус](https://img.shields.io/badge/статус-Работает-blue?style=for-the-badge)
-[![Установить](https://img.shields.io/badge/📦-Установить_бота-blue?style=for-the-badge)](https://github.com/Kafnik/Master_bot/releases/tag/v.1.5)
+[![Установить](https://img.shields.io/badge/📦-Установить_бота-blue?style=for-the-badge)](https://github.com/Kafnik/Master_bot/releases/tag/v.1.5-stable)
 
 <img src="https://github.com/Kafnik/Master_bot/blob/main/.gtihub/image/logo_master_bot.png" width="200" alt="Master Bot Logo">
 
