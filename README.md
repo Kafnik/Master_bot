@@ -102,3 +102,7 @@
 - `/id_unban @username` — снять глобальный бан ID
 - `/id_freeze @username` — заморозить global ID
 - `/id_unfreeze @username` — разморозить global ID
+
+## __📞 Связь__
+- Ccылка на бота: https://t.me/vectobot_number_bot
+- Ссылка на Openbot.Ai: https://t.me/openbotbotAi
