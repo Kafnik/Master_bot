@@ -155,3 +155,8 @@ python Master_bot.1.6.py
 ## 🌐 Сеть Openbot.Ai
 
 Master Bot работает вместе с **Random Bot**: общий аккаунт OpenBot ID, общие статусы и глобальные баны. У каждого бота своя основная база и своя база хэллоуинского события, поэтому они не конфликтуют.
+
+# Ссылки
+
+На бота: https://t.me/vectorbot_number_bot
+На наше комюнити: https://t.me/Openbot_Ai
