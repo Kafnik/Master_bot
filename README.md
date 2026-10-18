@@ -159,4 +159,5 @@ Master Bot работает вместе с **Random Bot**: общий акка�
 # Ссылки
 
 На бота: https://t.me/vectorbot_number_bot
+
 На наше комюнити: https://t.me/Openbot_Ai
