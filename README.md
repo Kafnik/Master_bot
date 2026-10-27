@@ -2,13 +2,18 @@
 
 ![Python](https://img.shields.io/badge/Python-3.13.7+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Telegram](https://img.shields.io/badge/Telegram-Bot-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)
-![Version](https://img.shields.io/badge/Version-1.5-FF6B6B?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-1.6.1-FF6B6B?style=for-the-badge)
 ![Статус](https://img.shields.io/badge/статус-Работает-blue?style=for-the-badge)
 [![Установить](https://img.shields.io/badge/📦-Установить_бота-blue?style=for-the-badge)](https://github.com/Kafnik/Master_bot/releases/tag/1.6)
 
 
 Telegram-бот на Python (**pyTelegramBotAPI**) с играми, экономикой, коллекцией эмодзи, рынком между игроками и хэллоуинским обновлением. Часть сети ботов **Openbot.Ai**: права, статусы и баны берутся из общего аккаунта **OpenBot ID**.
 
+# Патч 1.6.1
+Мы сделали чтобы ошибки в боте не писались при в выключенных уведомлениях
+Также мы сделали свою бибилиотеку но доступ пока есть у разработчиков openbot_Ai мы решаем в скоре время это все пофиксится пока пользуейтесь нашим ботом просим простить и понять Читр-Читр.
+И добавили команду /logs она показывает последние логи если у вас были выключены уведомления.
+ 
 ---
 
 ## ✨ Возможности
@@ -83,6 +88,9 @@ Telegram-бот на Python (**pyTelegramBotAPI**) с играми, эконом
 | `/sendall` | рассылка всем игрокам |
 | `/MODE_true`, `/MODE_false` | включить и выключить тех. обслуживание |
 | `/refund` | вернуть платёж в Stars |
+| `/logs` | показывает последний лог |
+| `/test_error` | проверяет фукцию сообещния ошибки |
+
 
 ---
 
