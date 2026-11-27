@@ -1,8 +1,8 @@
 """
-halloween_db.py — отдельная база события «Хэллоуин» и единственная точка доступа к ней.
+master_winter_db.py — отдельная база события «Новый год» и единственная точка доступа к ней.
 
 Как это устроено
-  • Файл базы: Halloween_event.db (лежит рядом с этим модулем).
+  • Файл базы: Master_winter_2026.db (лежит рядом с этим модулем).
   • Читает и меняет эту базу ТОЛЬКО этот модуль. Основной бот (test.py) вызывает функции отсюда
     и никогда не пишет SQL к базе события сам.
   • Модуль ничего не знает про telebot и про основную базу бота. Монеты, XP и эмодзи в инвентаре
@@ -11,13 +11,13 @@ halloween_db.py — отдельная база события «Хэллоуи�
   • Все функции потокобезопасны (бот работает в нескольких потоках).
 
 Что хранится в базе события
-  players        — Жуткие ключи игроков
+  players        — Снежинки игроков
   case_inventory — кейсы, которые лежат у игрока (купленные, но ещё не открытые)
-  titles         — купленные хэллоуинские титулы
+  titles         — купленные новогодние титулы
   event_log      — журнал всех изменений (кто, когда, что и на сколько изменилось)
   meta           — служебные флаги (например, что старые данные уже перенесены)
 
-Быстрая проверка из консоли:  python halloween_db.py
+Быстрая проверка из консоли:  python master_winter_db.py
 """
 
 import os
@@ -27,7 +27,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-DEFAULT_DB_NAME = "Halloween_event.db"
+DEFAULT_DB_NAME = "Master_winter_2026.db"
 
 _lock = threading.RLock()
 _conn: Optional[sqlite3.Connection] = None
@@ -41,14 +41,14 @@ def init(db_path=None):
     """Открывает базу события и создаёт таблицы, если их ещё нет.
 
     db_path:
-      • None — берётся переменная окружения HALLOWEEN_DB или Halloween_event.db;
+      • None — берётся переменная окружения MASTER_WINTER_DB или Master_winter_2026.db;
       • относительный путь считается от папки, где лежит этот файл;
       • абсолютный путь используется как есть.
     Повторный вызов с тем же путём ничего не ломает.
     """
     global _conn, _db_path
     with _lock:
-        path = db_path or os.environ.get("HALLOWEEN_DB") or DEFAULT_DB_NAME
+        path = db_path or os.environ.get("MASTER_WINTER_DB") or DEFAULT_DB_NAME
         if not os.path.isabs(path):
             path = os.path.join(os.path.dirname(os.path.abspath(__file__)), path)
 
@@ -88,7 +88,7 @@ def _create_tables(c):
         c.execute("""
             CREATE TABLE IF NOT EXISTS players (
                 user_id      INTEGER PRIMARY KEY,
-                spooky_keys  INTEGER NOT NULL DEFAULT 0 CHECK (spooky_keys >= 0),
+                snowflakes  INTEGER NOT NULL DEFAULT 0 CHECK (snowflakes >= 0),
                 created_at   TEXT
             )
         """)
@@ -139,13 +139,13 @@ def _check_amount(amount):
 
 
 # ============================================================
-#  🗝️ Жуткие ключи
+#  ❄️ Снежинки
 # ============================================================
 def get_keys(user_id):
-    """Сколько Жутких ключей у игрока."""
+    """Сколько снежинок у игрока."""
     with _lock:
         row = _c().execute(
-            "SELECT spooky_keys FROM players WHERE user_id = ?", (user_id,)
+            "SELECT snowflakes FROM players WHERE user_id = ?", (user_id,)
         ).fetchone()
         return int(row[0]) if row else 0
 
@@ -157,8 +157,8 @@ def add_keys(user_id, amount=1, reason=""):
         c = _c()
         with c:
             c.execute(
-                "INSERT INTO players (user_id, spooky_keys, created_at) VALUES (?, ?, ?) "
-                "ON CONFLICT(user_id) DO UPDATE SET spooky_keys = spooky_keys + excluded.spooky_keys",
+                "INSERT INTO players (user_id, snowflakes, created_at) VALUES (?, ?, ?) "
+                "ON CONFLICT(user_id) DO UPDATE SET snowflakes = snowflakes + excluded.snowflakes",
                 (user_id, amount, _now()),
             )
             _log(c, user_id, "keys+", amount, reason)
@@ -172,8 +172,8 @@ def spend_keys(user_id, amount=1, reason=""):
         c = _c()
         with c:
             cur = c.execute(
-                "UPDATE players SET spooky_keys = spooky_keys - ? "
-                "WHERE user_id = ? AND spooky_keys >= ?",
+                "UPDATE players SET snowflakes = snowflakes - ? "
+                "WHERE user_id = ? AND snowflakes >= ?",
                 (amount, user_id, amount),
             )
             if cur.rowcount != 1:
@@ -227,7 +227,7 @@ def take_case(user_id, case_key, reason=""):
 
 
 # ============================================================
-#  🏆 Хэллоуинские титулы
+#  🏆 Новый годские титулы
 # ============================================================
 def record_title(user_id, title_key, price=0):
     """Записывает, что игрок купил титул. True — новая запись; False — уже был записан."""
@@ -284,7 +284,7 @@ def get_summary():
         one = lambda sql: c.execute(sql).fetchone()[0] or 0
         return {
             "players": one("SELECT COUNT(*) FROM players"),
-            "keys_total": one("SELECT SUM(spooky_keys) FROM players"),
+            "keys_total": one("SELECT SUM(snowflakes) FROM players"),
             "cases_total": one("SELECT SUM(count) FROM case_inventory"),
             "titles_bought": one("SELECT COUNT(*) FROM titles"),
             "log_rows": one("SELECT COUNT(*) FROM event_log"),
@@ -302,8 +302,8 @@ def _meta_get(c, key):
 def migrate_from_main_db(main_db_path, title_keys=None):
     """Один раз переносит данные события из основной базы бота в базу события.
 
-    Переносится: users.spooky_keys, таблица case_inventory и (если передан title_keys) текущий
-    хэллоуинский титул игрока из users.profile_title. Основная база открывается только на чтение
+    Переносится: users.snowflakes, таблица case_inventory и (если передан title_keys) текущий
+    зимний титул игрока из users.profile_title. Основная база открывается только на чтение
     и НЕ меняется — старые столбцы остаются как резервная копия.
     Повторные вызовы ничего не делают (флаг хранится в таблице meta).
 
@@ -326,9 +326,9 @@ def migrate_from_main_db(main_db_path, title_keys=None):
                 user_cols = {r[1] for r in src.execute("PRAGMA table_info(users)")}
 
             keys = []
-            if "spooky_keys" in user_cols:
+            if "snowflakes" in user_cols:
                 keys = src.execute(
-                    "SELECT user_id, spooky_keys FROM users WHERE COALESCE(spooky_keys, 0) > 0"
+                    "SELECT user_id, snowflakes FROM users WHERE COALESCE(snowflakes, 0) > 0"
                 ).fetchall()
 
             cases = []
@@ -350,8 +350,8 @@ def migrate_from_main_db(main_db_path, title_keys=None):
         with c:
             for user_id, amount in keys:
                 c.execute(
-                    "INSERT INTO players (user_id, spooky_keys, created_at) VALUES (?, ?, ?) "
-                    "ON CONFLICT(user_id) DO UPDATE SET spooky_keys = spooky_keys + excluded.spooky_keys",
+                    "INSERT INTO players (user_id, snowflakes, created_at) VALUES (?, ?, ?) "
+                    "ON CONFLICT(user_id) DO UPDATE SET snowflakes = snowflakes + excluded.snowflakes",
                     (user_id, int(amount), _now()),
                 )
                 _log(c, user_id, "migrate_keys", amount, "из основной базы")
@@ -381,7 +381,7 @@ def migrate_from_main_db(main_db_path, title_keys=None):
 
 
 # ============================================================
-#  Проверка из консоли:  python halloween_db.py
+#  Проверка из консоли:  python master_winter_db.py
 # ============================================================
 if __name__ == "__main__":
     print("База события:", init())
